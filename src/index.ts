@@ -3,6 +3,8 @@ import * as Umzug from 'umzug';
 
 import DynamoDBStorage from './storages/dynamodb';
 
+export type Migrator = Umzug.Umzug;
+
 interface MigratorOptions {
   dynamodb?: DocumentClient;
   migrationTable?: string;
@@ -14,7 +16,7 @@ interface MigratorOptions {
  * @param options.dynamodb - a DynamoDB document client instance
  * @param options.migrationTable - name of migration table in DynamoDB
  */
-export function migratorFactory({ dynamodb, migrationTable }: MigratorOptions = {}) {
+export function migratorFactory({ dynamodb, migrationTable }: MigratorOptions = {}): Migrator {
   dynamodb = dynamodb || new DocumentClient();
   const tableName = migrationTable || 'migrations';
 
@@ -32,4 +34,4 @@ export function migratorFactory({ dynamodb, migrationTable }: MigratorOptions = 
 /**
  * Migrator instance with options by default.
  */
-export const defaultMigrator = migratorFactory();
+export const defaultMigrator: Migrator = migratorFactory();
