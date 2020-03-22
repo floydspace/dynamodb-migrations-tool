@@ -1,0 +1,10 @@
+.vscode
+node_modules
+src
+test
+coverage
+.editorconfig
+.eslintignore
+.eslintrc.yml
+jest.config.js
+tsconfig.json

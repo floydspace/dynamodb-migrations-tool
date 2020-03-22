@@ -1,0 +1,52 @@
+{
+  "name": "dynamodb-migrations-tool",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "rm -rf ./dist && tsc",
+    "lint": "eslint . --ext .ts --ignore-path .gitignore",
+    "test": "jest",
+    "coverage": "jest --coverage && cat ./coverage/lcov.info | coveralls",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/floydspace/dynamodb-migrations-tool.git"
+  },
+  "keywords": [
+    "umzug",
+    "dynamodb",
+    "aws",
+    "serverless",
+    "sequelize",
+    "migrate",
+    "migration",
+    "migrations"
+  ],
+  "author": "Victor Korzunin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/floydspace/dynamodb-migrations-tool/issues"
+  },
+  "homepage": "https://floydspace.github.io",
+  "devDependencies": {
+    "@types/jest": "^25.1.4",
+    "@types/node": "^13.9.2",
+    "@types/umzug": "^2.2.3",
+    "@typescript-eslint/eslint-plugin": "^2.24.0",
+    "@typescript-eslint/parser": "^2.24.0",
+    "aws-sdk": "^2.643.0",
+    "aws-sdk-mock": "^5.1.0",
+    "coveralls": "^3.0.11",
+    "eslint": "^6.8.0",
+    "jest": "^25.1.0",
+    "ts-jest": "^25.2.1",
+    "typescript": "^3.8.3"
+  },
+  "peerDependencies": {
+    "aws-sdk": "^2.0.0"
+  },
+  "dependencies": {
+    "umzug": "^2.2.0"
+  }
+}
