@@ -8,6 +8,7 @@ rules:
   semi: 'off'
   quotes: 'off'
   no-use-before-define: 'off'
+  '@typescript-eslint/no-empty-interface': 'off'
   '@typescript-eslint/explicit-function-return-type': 'off'
   '@typescript-eslint/semi': error
   '@typescript-eslint/quotes':
