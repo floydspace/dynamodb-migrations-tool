@@ -1,9 +1,9 @@
 {
   "name": "dynamodb-migrations-tool",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "main": "dist/index.js",
   "scripts": {
-    "build": "rm -rf ./dist && tsc",
+    "build": "rm -rf ./dist && tsc && cp -R .plop/. ./dist/.plop/",
     "lint": "eslint . --ext .ts --ignore-path .gitignore",
     "test": "jest",
     "coverage": "jest --coverage && cat ./coverage/lcov.info | coveralls",
@@ -47,6 +47,7 @@
     "aws-sdk": "^2.0.0"
   },
   "dependencies": {
+    "node-plop": "^0.25.0",
     "umzug": "^2.2.0"
   }
 }

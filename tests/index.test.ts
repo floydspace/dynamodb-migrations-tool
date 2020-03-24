@@ -1,7 +1,7 @@
 import * as AWS from 'aws-sdk';
 import * as AWSMock from 'aws-sdk-mock';
 
-import { migratorFactory } from '../src';
+import { Migrator } from '../src';
 
 describe('Migrator tests', () => {
   beforeAll((done) => {
@@ -10,7 +10,7 @@ describe('Migrator tests', () => {
   });
 
   it('Should not migrator factory be thrown', async () => {
-    const factory = () => migratorFactory();
+    const factory = () => new Migrator();
     expect(factory).not.toThrow();
   });
 });

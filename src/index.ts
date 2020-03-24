@@ -1,39 +1,71 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
+import nodePlop from 'node-plop/lib/node-plop';
 import * as Umzug from 'umzug';
 
+import { getCurrentYYYYMMDDHHmms } from './helpers/path';
 import DynamoDBStorage from './storages/dynamodb';
 
 export {DynamoDBStorage};
-
-export interface Migrator extends Umzug.Umzug {}
 
 export interface MigratorOptions {
   dynamodb?: DocumentClient;
   tableName?: string;
 }
 
-/**
- * Migrator factory function, creates an umzug instance with dynamodb storage.
- * @param options
- * @param options.dynamodb - a DynamoDB document client instance
- * @param options.tableName - a name of migration table in DynamoDB
- */
-export function migratorFactory({ dynamodb, tableName }: MigratorOptions = {}): Migrator {
-  dynamodb = dynamodb || new DocumentClient();
-  tableName = tableName || 'migrations';
+export class Migrator {
+  private umzug: Umzug.Umzug;
+  private generator;
 
-  return new Umzug({
-    storage: new DynamoDBStorage({ dynamodb, tableName }),
-    migrations: {
-      params: [dynamodb],
-    },
-    logging: function (...args: unknown[]) {
-      console.log.apply(null, args);
-    }
-  });
+  /**
+   * Migrator factory function, creates an umzug instance with dynamodb storage.
+   * @param options
+   * @param options.dynamodb - a DynamoDB document client instance
+   * @param options.tableName - a name of migration table in DynamoDB
+   */
+  constructor({ dynamodb, tableName }: MigratorOptions = {}) {
+    dynamodb = dynamodb || new DocumentClient();
+    tableName = tableName || 'migrations';
+
+    this.umzug = new Umzug({
+      storage: new DynamoDBStorage({ dynamodb, tableName }),
+      migrations: {
+        params: [dynamodb],
+      },
+      logging: function (...args: unknown[]) {
+        console.log.apply(null, args);
+      }
+    });
+
+    const plop = nodePlop('.plop/plopfile.js');
+    this.generator = plop.getGenerator('migration');
+  }
+
+  async generate(migrationName: string) {
+    await this.generator.runActions({timestamp: getCurrentYYYYMMDDHHmms(), name: migrationName});
+  }
+
+  execute(options?: Umzug.ExecuteOptions) {
+    return this.umzug.execute(options);
+  }
+
+  pending() {
+    return this.umzug.pending();
+  }
+
+  executed() {
+    return this.umzug.executed();
+  }
+
+  up(options?) {
+    return this.umzug.up(options);
+  }
+
+  down(options?) {
+    return this.umzug.down(options);
+  }
 }
 
 /**
  * Migrator instance with options by default.
  */
-export const defaultMigrator: Migrator = migratorFactory();
+export const defaultMigrator: Migrator = new Migrator();
