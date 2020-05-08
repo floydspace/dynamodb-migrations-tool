@@ -1,4 +1,4 @@
-# dynamit-cli [![Build Status](https://travis-ci.org/floydspace/dynamodb-migrations-tool.svg?branch=master)](https://travis-ci.org/floydspace/dynamodb-migrations-tool) [![Coverage Status](https://coveralls.io/repos/github/floydspace/dynamodb-migrations-tool/badge.svg?branch=master)](https://coveralls.io/github/floydspace/dynamodb-migrations-tool?branch=master) [![npm version](https://badge.fury.io/js/dynamodb-migrations-tool.svg)](https://badge.fury.io/js/dynamodb-migrations-tool)
+# dynamit-cli [![Build Status](https://travis-ci.org/floydspace/dynamodb-migrations-tool.svg?branch=master)](https://travis-ci.org/floydspace/dynamodb-migrations-tool) [![Coverage Status](https://coveralls.io/repos/github/floydspace/dynamodb-migrations-tool/badge.svg?branch=master)](https://coveralls.io/github/floydspace/dynamodb-migrations-tool?branch=master) [![npm version](https://badge.fury.io/js/dynamit-cli.svg)](https://badge.fury.io/js/dynamit-cli)
 
 The DynamoDB Migrations Tool Command Line Interface (CLI)
 
