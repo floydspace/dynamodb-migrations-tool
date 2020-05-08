@@ -1,7 +1,7 @@
 import * as AWS from 'aws-sdk';
 import * as AWSMock from 'aws-sdk-mock';
 
-import { Migrator } from '../src';
+import { Migrator } from '../../src/core/migrator';
 
 describe('Migrator tests', () => {
   beforeAll((done) => {

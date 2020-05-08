@@ -5,6 +5,7 @@
     "outDir": "dist",
     "declaration": true,
     "skipLibCheck": true,
+    "esModuleInterop": true,
     "lib": [
       "ES2017"
     ]

@@ -1,51 +1,43 @@
-# dynamodb-migrations-tool [![Build Status](https://travis-ci.org/floydspace/dynamodb-migrations-tool.svg?branch=master)](https://travis-ci.org/floydspace/dynamodb-migrations-tool) [![Coverage Status](https://coveralls.io/repos/github/floydspace/dynamodb-migrations-tool/badge.svg?branch=master)](https://coveralls.io/github/floydspace/dynamodb-migrations-tool?branch=master) [![npm version](https://badge.fury.io/js/dynamodb-migrations-tool.svg)](https://badge.fury.io/js/dynamodb-migrations-tool)
+# dynamit-cli [![Build Status](https://travis-ci.org/floydspace/dynamodb-migrations-tool.svg?branch=master)](https://travis-ci.org/floydspace/dynamodb-migrations-tool) [![Coverage Status](https://coveralls.io/repos/github/floydspace/dynamodb-migrations-tool/badge.svg?branch=master)](https://coveralls.io/github/floydspace/dynamodb-migrations-tool?branch=master) [![npm version](https://badge.fury.io/js/dynamodb-migrations-tool.svg)](https://badge.fury.io/js/dynamodb-migrations-tool)
 
-The *dynamodb-migrations-tool* is a DynamoDB storage based migrator implemented on top of the relyable and well tested framework agnostic migration tool **[umzug](https://github.com/sequelize/umzug)**.
+The DynamoDB Migrations Tool Command Line Interface (CLI)
+
+## Table of Contents
+- [Installation](#installation)
+- [Documentation](#documentation)
 
 ## Installation
 
-```sh
-npm install dynamodb-migrations-tool --save
+Make sure you have [AWS-SDK](https://aws.amazon.com/sdk-for-node-js/) installed. Then install the Dynamit CLI to be used in your project with
+
+```bash
+$ npm install --save-dev dynamit-cli
 ```
 
-## Usage
+And then you should be able to run the CLI with
 
-The following example demonstrate a minimal usage of the migrator:
-
-```javascript
-const {defaultMigrator} = require('dynamodb-migrations-tool');
-
-(async () => {
-  // checks migrations and run them if they are not already applied
-  await defaultMigrator.up();
-  console.log('All migrations performed successfully');
-})();
-```
-Using example bellow you can create a migrator instance with a couple `migratorOptions`:
-```javascript
-const {migratorFactory} = require('dynamodb-migrations-tool');
-
-const migrator = migratorFactory({
-  migrationTable: 'migrations' // default
-});
-
-(async () => {
-  await migrator.up();
-})();
+```bash
+$ npx dynamit --help
 ```
 
-### Migrator Options
+### Usage
 
-The possible `migratorOptions` are:
-
-```js
-{
-  // The configured DynamoDB DocumentClient instance from aws-sdk.
-  // Optional. If omited it will be created with default aws-sdk config.
-  dynamodb: DynamoDB.DocumentClient,
-
-  // Custom DynamoDB migration table name, can be populated with stage and stuff.
-  // Optional. Default value is `migrations`.
-  migrationTable: String,
-}
 ```
+npx dynamit [command]
+
+Commands:
+  dynamit migrate                        Run pending migrations
+  dynamit migrate:status                 List the status of all migrations
+  dynamit migrate:undo                   Reverts a migration
+  dynamit migrate:undo:all               Revert all migrations ran
+  dynamit migration:generate             Generates a new migration file       [aliases: migration:create]
+
+Options:
+  --version  Show version number                                         [boolean]
+  --help     Show help                                                   [boolean]
+```
+
+## Documentation
+
+- [CLI Options](docs/README.md)
+- [Frequently Asked Questions](docs/FAQ.md)

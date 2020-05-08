@@ -1,71 +1,36 @@
-import { DocumentClient } from 'aws-sdk/clients/dynamodb';
-import nodePlop from 'node-plop/lib/node-plop';
-import * as Umzug from 'umzug';
+import clc from 'cli-color';
+import yargs from 'yargs';
 
-import { getCurrentYYYYMMDDHHmms } from './helpers/path';
-import DynamoDBStorage from './storages/dynamodb';
+import migrate from './commands/migrate';
+import migrateUndo from './commands/migrate-undo';
+import migrateUndoAll from './commands/migrate-undo-all';
+import migrationGenerate from './commands/migration-generate';
+import logger from './helpers/logger';
+import version from './helpers/version';
 
-export {DynamoDBStorage};
+const versions = [
+  'Node: ' + version.getNodeVersion(),
+  'CLI: '  + version.getCliVersion(),
+];
 
-export interface MigratorOptions {
-  dynamodb?: DocumentClient;
-  tableName?: string;
+logger.log();
+logger.log(clc.underline(`DynamoDB migrations tool CLI [${versions.join(', ')}]`));
+logger.log();
+
+const cli = yargs
+  .help()
+  .version()
+  .command('migrate', 'Run pending migrations', migrate)
+  .command('migrate:status', 'List the status of all migrations', migrate)
+  .command('migrate:undo', 'Reverts a migration', migrateUndo)
+  .command('migrate:undo:all', 'Revert all migrations ran', migrateUndoAll)
+  .command(['migration:generate', 'migration:create'], 'Generates a new migration file', migrationGenerate)
+  .wrap(yargs.terminalWidth())
+  .strict();
+
+const args = cli.argv;
+
+// if no command then show help
+if (!args._[0]) {
+  cli.showHelp();
 }
-
-export class Migrator {
-  private umzug: Umzug.Umzug;
-  private generator;
-
-  /**
-   * Migrator factory function, creates an umzug instance with dynamodb storage.
-   * @param options
-   * @param options.dynamodb - a DynamoDB document client instance
-   * @param options.tableName - a name of migration table in DynamoDB
-   */
-  constructor({ dynamodb, tableName }: MigratorOptions = {}) {
-    dynamodb = dynamodb || new DocumentClient();
-    tableName = tableName || 'migrations';
-
-    this.umzug = new Umzug({
-      storage: new DynamoDBStorage({ dynamodb, tableName }),
-      migrations: {
-        params: [dynamodb],
-      },
-      logging: function (...args: unknown[]) {
-        console.log.apply(null, args);
-      }
-    });
-
-    const plop = nodePlop('.plop/plopfile.js');
-    this.generator = plop.getGenerator('migration');
-  }
-
-  async generate(migrationName: string) {
-    await this.generator.runActions({timestamp: getCurrentYYYYMMDDHHmms(), name: migrationName});
-  }
-
-  execute(options?: Umzug.ExecuteOptions) {
-    return this.umzug.execute(options);
-  }
-
-  pending() {
-    return this.umzug.pending();
-  }
-
-  executed() {
-    return this.umzug.executed();
-  }
-
-  up(options?) {
-    return this.umzug.up(options);
-  }
-
-  down(options?) {
-    return this.umzug.down(options);
-  }
-}
-
-/**
- * Migrator instance with options by default.
- */
-export const defaultMigrator: Migrator = new Migrator();
