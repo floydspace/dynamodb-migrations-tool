@@ -1,6 +1,6 @@
 {
   "name": "dynamit-cli",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "The DynamoDB migrations tool CLI",
   "bin": {
     "dynamit": "./dist/dynamit",
@@ -44,7 +44,6 @@
     "@types/umzug": "^2.2.3",
     "@typescript-eslint/eslint-plugin": "^2.24.0",
     "@typescript-eslint/parser": "^2.24.0",
-    "aws-sdk": "^2.643.0",
     "aws-sdk-mock": "^5.1.0",
     "coveralls": "^3.0.11",
     "eslint": "^6.8.0",
@@ -53,6 +52,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
+    "aws-sdk": "^2.673.0",
     "cli-color": "^2.0.0",
     "node-plop": "^0.25.0",
     "umzug": "^2.3.0",
