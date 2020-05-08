@@ -1,10 +1,10 @@
 {
   "name": "dynamit-cli",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "The DynamoDB migrations tool CLI",
   "bin": {
-    "dynamit": "./dist/index",
-    "dynamit-cli": "./dist/index"
+    "dynamit": "./dist/dynamit",
+    "dynamit-cli": "./dist/dynamit"
   },
   "scripts": {
     "build": "npm run build-clean && tsc && npm run build-bin && npm run build-assets",
