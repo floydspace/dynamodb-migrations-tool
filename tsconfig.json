@@ -1,14 +1,13 @@
 {
   "compilerOptions": {
     "module": "CommonJS",
-    "target": "ES6",
+    "target": "es5",
     "outDir": "dist",
     "declaration": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "lib": [
-      "ES2017"
-    ]
+    "types": ["node"],
+    "lib": ["es6", "ES2017"]
   },
   "exclude": [
     "node_modules"

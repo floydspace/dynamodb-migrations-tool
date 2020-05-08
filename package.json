@@ -1,6 +1,6 @@
 {
   "name": "dynamit-cli",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "The DynamoDB migrations tool CLI",
   "bin": {
     "dynamit": "./dist/dynamit",
