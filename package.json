@@ -7,7 +7,10 @@
     "dynamit-cli": "./dist/index"
   },
   "scripts": {
-    "build": "rm -rf ./dist && tsc && cp -R .plop/. ./dist/.plop/",
+    "build": "npm run build-clean && tsc && npm run build-bin && npm run build-assets",
+    "build-bin": "mv ./dist/index.js ./dist/dynamit && chmod +x ./dist/dynamit",
+    "build-assets": "cp -R .plop/. ./dist/.plop/",
+    "build-clean": "rm -rf ./dist/",
     "lint": "eslint . --ext .ts --ignore-path .gitignore",
     "test": "jest",
     "coverage": "jest --coverage && cat ./coverage/lcov.info | coveralls",
