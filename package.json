@@ -1,24 +1,31 @@
 {
   "name": "dynamit-cli",
-  "version": "1.2.6",
+  "version": "0.0.0-development",
   "description": "The DynamoDB migrations tool CLI",
   "bin": {
     "dynamit": "./dist/dynamit",
     "dynamit-cli": "./dist/dynamit"
   },
+  "files": [
+    "dist",
+    "package.json",
+    "README.md"
+  ],
   "scripts": {
     "build": "npm run build-clean && tsc && npm run build-bin && npm run build-assets",
     "build-bin": "mv ./dist/index.js ./dist/dynamit && chmod +x ./dist/dynamit",
     "build-assets": "cp -R .plop/. ./dist/.plop/",
     "build-clean": "rm -rf ./dist/",
     "lint": "eslint . --ext .ts --ignore-path .gitignore",
+    "pretest": "npm run lint",
     "test": "jest",
     "coverage": "jest --coverage && cat ./coverage/lcov.info | coveralls",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "semantic-release": "semantic-release"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/floydspace/dynamodb-migrations-tool.git"
+    "url": "https://github.com/floydspace/dynamodb-migrations-tool.git"
   },
   "keywords": [
     "cli",
@@ -38,6 +45,8 @@
   },
   "homepage": "https://floydspace.github.io",
   "devDependencies": {
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
     "@types/cli-color": "^2.0.0",
     "@types/jest": "^25.1.4",
     "@types/node": "^13.9.2",
@@ -47,7 +56,9 @@
     "aws-sdk-mock": "^5.1.0",
     "coveralls": "^3.0.11",
     "eslint": "^6.8.0",
+    "husky": "^4.2.5",
     "jest": "^25.1.0",
+    "semantic-release": "^17.0.7",
     "ts-jest": "^25.5.0",
     "typescript": "^3.8.3"
   },
