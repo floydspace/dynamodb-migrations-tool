@@ -23,7 +23,7 @@ export default class DynamoDBStorage implements Storage {
    * @param options
    * @param options.dynamodb - a DynamoDB document client instance
    * @param options.tableName - name of migration table in DynamoDB
-   * @param options.attributeName - name of the table rangeKey attribute in DynamoDB
+   * @param options.attributeName - name of the table primaryKey attribute in DynamoDB
    * @param options.timestamp - option to add timestamps to the DynamoDB table
    */
   constructor({ dynamodb, tableName, attributeName, timestamp }: DynamoDBStorageOptions = {}) {
@@ -42,7 +42,7 @@ export default class DynamoDBStorage implements Storage {
    * @param migrationName - Name of the migration to be logged.
    */
   async logMigration(migrationName: string) {
-    const item: DocumentClient.PutItemInputAttributeMap = { [this.attributeName]: migrationName, executed: 'OK' };
+    const item: DocumentClient.PutItemInputAttributeMap = { [this.attributeName]: migrationName };
 
     if (this.timestamp) {
       item.createdAt = Date.now();
@@ -57,7 +57,7 @@ export default class DynamoDBStorage implements Storage {
    * @param migrationName - Name of the migration to be unlogged.
    */
   async unlogMigration(migrationName: string) {
-    const key: DocumentClient.Key = { [this.attributeName]: migrationName, executed: 'OK' };
+    const key: DocumentClient.Key = { [this.attributeName]: migrationName };
 
     await this.dynamodb.delete({ TableName: this.tableName, Key: key }).promise();
   }
@@ -70,10 +70,8 @@ export default class DynamoDBStorage implements Storage {
     let startKey: DocumentClient.Key;
 
     do {
-      const { Items, LastEvaluatedKey } = await this.dynamodb.query({
+      const { Items, LastEvaluatedKey } = await this.dynamodb.scan({
         TableName: this.tableName,
-        KeyConditionExpression: 'executed = :executed',
-        ExpressionAttributeValues: { ':executed': 'OK' },
         ExclusiveStartKey: startKey,
       }).promise();
 
