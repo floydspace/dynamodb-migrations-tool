@@ -21,5 +21,6 @@ jobs:
         - npm run coverage
 
 stages:
+  - test
   - coverage
   - release
