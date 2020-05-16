@@ -19,3 +19,7 @@ jobs:
       node_js: lts/*
       script:
         - npm run coverage
+
+stages:
+  - coverage
+  - release
