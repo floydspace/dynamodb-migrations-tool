@@ -1,5 +1,6 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import nodePlop from 'node-plop/lib/node-plop';
+import path from 'path';
 import Umzug from 'umzug';
 
 import logger from '../helpers/logger';
@@ -38,7 +39,7 @@ export class Migrator {
       logging: logger.log
     });
 
-    const plop = nodePlop('.plop/plopfile.js');
+    const plop = nodePlop(path.join(__dirname, '../.plop/plopfile.js'));
     this.generator = plop.getGenerator('migration');
   }
 
