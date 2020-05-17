@@ -1,6 +1,7 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import nodePlop from 'node-plop/lib/node-plop';
 import path from 'path';
+import { pick } from 'ramda';
 import Umzug from 'umzug';
 
 import logger from '../helpers/logger';
@@ -10,6 +11,9 @@ import DynamoDBStorage from '../storages/dynamodb';
 export {DynamoDBStorage};
 
 export interface MigratorOptions {
+  region?: string;
+  accessKeyId?: string;
+  secretAccessKey?: string;
   dynamodb?: DocumentClient;
   tableName?: string;
   attributeName?: string;
@@ -22,12 +26,15 @@ export class Migrator {
   /**
    * Migrator factory function, creates an umzug instance with dynamodb storage.
    * @param options
+   * @param options.region - an AWS Region
    * @param options.dynamodb - a DynamoDB document client instance
    * @param options.tableName - a name of migration table in DynamoDB
    * @param options.attributeName - name of the table primaryKey attribute in DynamoDB
    */
-  constructor({ dynamodb, tableName, attributeName }: MigratorOptions = {}) {
-    dynamodb = dynamodb || new DocumentClient();
+  constructor(options: MigratorOptions = {}) {
+    let { dynamodb, tableName, attributeName } = options;
+
+    dynamodb = dynamodb || new DocumentClient(pick(['region', 'accessKeyId', 'secretAccessKey'], options));
     tableName = tableName || 'migrations';
     attributeName = attributeName || 'name';
 

@@ -1,16 +1,17 @@
+import { pick } from 'ramda';
 import { Arguments, Argv } from 'yargs';
 
 import { Migrator } from './migrator';
 
 export interface BaseCliOptions {
-  'options-path': string;
-  'migrations-path': string;
-  'access-key-id': string;
-  'secret-access-key': string;
-  'region': string;
-  'endpoint-url': string;
-  'table-name': string;
-  'attribute-name': string;
+  optionsPath: string;
+  migrationsPath: string;
+  accessKeyId: string;
+  secretAccessKey: string;
+  region: string;
+  endpointUrl: string;
+  tableName: string;
+  attributeName: string;
 }
 
 export function baseOptions(yargs: Argv<BaseCliOptions>) {
@@ -41,11 +42,13 @@ export function baseOptions(yargs: Argv<BaseCliOptions>) {
       type: 'string'
     })
     .option('table-name', {
-      describe: 'The DynamoDB table name. `migrations` is default.',
+      describe: 'The DynamoDB table name',
+      default: 'migrations',
       type: 'string'
     })
     .option('attribute-name', {
-      describe: 'The DynamoDB primaryKey attribute name. `name` is default.',
+      describe: 'The DynamoDB primaryKey attribute name',
+      default: 'name',
       type: 'string'
     });
 }
@@ -53,8 +56,9 @@ export function baseOptions(yargs: Argv<BaseCliOptions>) {
 export function baseHandler<T extends BaseCliOptions>(callback: (args: Arguments<T>, migrator: Migrator) => void) {
   return (args: Arguments<T>): void => {
     const migrator = new Migrator({
-      tableName: args['table-name'],
-      attributeName: args['attribute-name'],
+      ...pick(['region', 'accessKeyId', 'secretAccessKey'], args),
+      tableName: args.tableName,
+      attributeName: args.attributeName,
     });
 
     callback(args, migrator);
