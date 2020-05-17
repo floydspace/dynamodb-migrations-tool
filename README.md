@@ -8,7 +8,7 @@ The DynamoDB Migrations Tool Command Line Interface (CLI)
 
 ## Installation
 
-Make sure you have [AWS-SDK](https://aws.amazon.com/sdk-for-node-js/) installed. Then install the Dynamit CLI to be used in your project with
+Make sure you have [AWS-SDK](https://aws.amazon.com/sdk-for-node-js/) installed and configured properly. Then install the Dynamit CLI to be used in your project with
 
 ```bash
 $ npm install --save-dev dynamit-cli
@@ -19,6 +19,8 @@ And then you should be able to run the CLI with
 ```bash
 $ npx dynamit --help
 ```
+
+Migration records are supposed to be stored in the DynamoDB table with the `table-name` (`"migrations"` by default) and primary key `attribute-name` (`"name"` by default) defined as optional cli options. The tool cannot create the table for you yet, so make sure you created it properly. See [Creating a Table Developer Guide](https://docs.amazonaws.cn/en_us/amazondynamodb/latest/developerguide/WorkingWithTables.Basics.html#WorkingWithTables.Basics.CreateTable)
 
 ### Usage
 
