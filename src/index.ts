@@ -20,8 +20,8 @@ logger.log(clc.underline(`DynamoDB migrations tool CLI [${versions.join(', ')}]`
 logger.log();
 
 const cli = yargs
-  .help()
-  .version()
+  .help().alias('h', 'help')
+  .version().alias('v', 'version')
   .command('migrate', 'Run pending migrations', migrate)
   .command('migrate:status', 'List the status of all migrations', migrate)
   .command('migrate:undo', 'Reverts a migration', migrateUndo)
