@@ -7,14 +7,14 @@
     "dynamit-cli": "./dist/dynamit"
   },
   "files": [
+    ".plop",
     "dist",
     "package.json",
     "README.md"
   ],
   "scripts": {
-    "build": "npm run build-clean && tsc && npm run build-bin && npm run build-assets",
+    "build": "npm run build-clean && tsc && npm run build-bin",
     "build-bin": "mv ./dist/index.js ./dist/dynamit && chmod +x ./dist/dynamit",
-    "build-assets": "cp -R .plop/. ./dist/.plop/",
     "build-clean": "rm -rf ./dist/",
     "lint": "eslint . --ext .ts --ignore-path .gitignore",
     "pretest": "npm run lint",
