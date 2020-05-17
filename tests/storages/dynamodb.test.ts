@@ -16,10 +16,10 @@ describe('DynamoDBStorage tests', () => {
   });
 
   it('Should get migrations', async () => {
-    const spy = jest.fn((params: DocumentClient.QueryInput, callback: Function) => {
-      callback(null, { Items: [{ executed: 'OK', name: 'bar' }] });
+    const spy = jest.fn((params: DocumentClient.ScanInput, callback: Function) => {
+      callback(null, { Items: [{ name: 'bar' }] });
     });
-    AWSMock.mock('DynamoDB.DocumentClient', 'query', spy);
+    AWSMock.mock('DynamoDB.DocumentClient', 'scan', spy);
 
     const migrations = await new DynamoDBStorage({}).executed();
 
@@ -31,13 +31,13 @@ describe('DynamoDBStorage tests', () => {
   });
 
   it('Should get paginated migrations', async () => {
-    const spy = jest.fn((params: DocumentClient.QueryInput, callback: Function) => {
+    const spy = jest.fn((params: DocumentClient.ScanInput, callback: Function) => {
       callback(null, params.ExclusiveStartKey
-        ? { Items: [{ executed: 'OK', name: 'bar' }] }
-        : { Items: [{ executed: 'OK', name: 'foo' }], LastEvaluatedKey: {} }
+        ? { Items: [{ name: 'bar' }] }
+        : { Items: [{ name: 'foo' }], LastEvaluatedKey: {} }
       );
     });
-    AWSMock.mock('DynamoDB.DocumentClient', 'query', spy);
+    AWSMock.mock('DynamoDB.DocumentClient', 'scan', spy);
 
     const migrations = await new DynamoDBStorage({}).executed();
 
@@ -59,7 +59,7 @@ describe('DynamoDBStorage tests', () => {
     await new DynamoDBStorage({}).logMigration(migrationName);
 
     expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy.mock.calls[0][0]).toEqual({ TableName: 'migrations', Item: { name: migrationName, executed: 'OK' } });
+    expect(spy.mock.calls[0][0]).toEqual({ TableName: 'migrations', Item: { name: migrationName } });
 
     AWSMock.restore('DynamoDB.DocumentClient');
   });
@@ -76,7 +76,7 @@ describe('DynamoDBStorage tests', () => {
     const migrationName = 'foo';
     await new DynamoDBStorage({ timestamp: true }).logMigration(migrationName);
 
-    const etalon = { TableName: 'migrations', Item: { name: migrationName, executed: 'OK', createdAt: now } };
+    const etalon = { TableName: 'migrations', Item: { name: migrationName, createdAt: now } };
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy.mock.calls[0][0]).toEqual(etalon);
 
@@ -93,7 +93,7 @@ describe('DynamoDBStorage tests', () => {
     await new DynamoDBStorage({}).unlogMigration(migrationName);
 
     expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy.mock.calls[0][0]).toEqual({ TableName: 'migrations', Key: { name: migrationName, executed: 'OK' } });
+    expect(spy.mock.calls[0][0]).toEqual({ TableName: 'migrations', Key: { name: migrationName } });
 
     AWSMock.restore('DynamoDB.DocumentClient');
   });
