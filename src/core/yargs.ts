@@ -1,4 +1,6 @@
-import { Argv } from 'yargs';
+import { Arguments, Argv } from 'yargs';
+
+import { Migrator } from './migrator';
 
 export interface BaseCliOptions {
   'options-path': string;
@@ -7,6 +9,8 @@ export interface BaseCliOptions {
   'secret-access-key': string;
   'region': string;
   'endpoint-url': string;
+  'table-name': string;
+  'attribute-name': string;
 }
 
 export function baseOptions(yargs: Argv<BaseCliOptions>) {
@@ -33,7 +37,26 @@ export function baseOptions(yargs: Argv<BaseCliOptions>) {
       type: 'string'
     })
     .option('endpoint-url', {
-      describe: 'The DynamoDB endpoint url to use',
+      describe: 'The DynamoDB endpoint url to use. The DynamoDB local instance url could be specified here.',
+      type: 'string'
+    })
+    .option('table-name', {
+      describe: 'The DynamoDB table name. `migrations` is default.',
+      type: 'string'
+    })
+    .option('attribute-name', {
+      describe: 'The DynamoDB primaryKey attribute name. `name` is default.',
       type: 'string'
     });
+}
+
+export function baseHandler<T extends BaseCliOptions>(callback: (args: Arguments<T>, migrator: Migrator) => void) {
+  return (args: Arguments<T>): void => {
+    const migrator = new Migrator({
+      tableName: args['table-name'],
+      attributeName: args['attribute-name'],
+    });
+
+    callback(args, migrator);
+  };
 }

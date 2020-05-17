@@ -1,7 +1,6 @@
 import { CommandModule } from 'yargs';
 
-import { defaultMigrator } from '../core/migrator';
-import { BaseCliOptions, baseOptions } from '../core/yargs';
+import { BaseCliOptions, baseHandler, baseOptions } from '../core/yargs';
 import logger from '../helpers/logger';
 
 interface CliOptions extends BaseCliOptions {
@@ -16,9 +15,9 @@ export default {
       type: 'string'
     }),
 
-  handler: async (args) => {
+  handler: baseHandler(async (args, migrator) => {
     try {
-      const migrations = await defaultMigrator.executed();
+      const migrations = await migrator.executed();
 
       if (migrations.length === 0) {
         logger.log('No executed migrations found.');
@@ -26,11 +25,11 @@ export default {
         process.exit(0);
       }
 
-      await defaultMigrator.down({ to: args.to || 0 });
+      await migrator.down({ to: args.to || 0 });
     } catch (e) {
       logger.error(e);
     }
 
     process.exit(0);
-  }
+  })
 } as CommandModule<CliOptions, CliOptions>;

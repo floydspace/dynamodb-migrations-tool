@@ -11,6 +11,7 @@ export {DynamoDBStorage};
 export interface MigratorOptions {
   dynamodb?: DocumentClient;
   tableName?: string;
+  attributeName?: string;
 }
 
 export class Migrator {
@@ -22,13 +23,15 @@ export class Migrator {
    * @param options
    * @param options.dynamodb - a DynamoDB document client instance
    * @param options.tableName - a name of migration table in DynamoDB
+   * @param options.attributeName - name of the table primaryKey attribute in DynamoDB
    */
-  constructor({ dynamodb, tableName }: MigratorOptions = {}) {
+  constructor({ dynamodb, tableName, attributeName }: MigratorOptions = {}) {
     dynamodb = dynamodb || new DocumentClient();
     tableName = tableName || 'migrations';
+    attributeName = attributeName || 'name';
 
     this.umzug = new Umzug({
-      storage: new DynamoDBStorage({ dynamodb, tableName }),
+      storage: new DynamoDBStorage({ dynamodb, tableName, attributeName }),
       migrations: {
         params: [dynamodb],
       },

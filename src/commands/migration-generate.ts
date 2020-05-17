@@ -2,8 +2,7 @@ import clc from 'cli-color';
 import path from 'path';
 import { CommandModule } from 'yargs';
 
-import { defaultMigrator } from '../core/migrator';
-import { BaseCliOptions, baseOptions } from '../core/yargs';
+import { BaseCliOptions, baseHandler, baseOptions } from '../core/yargs';
 import logger from '../helpers/logger';
 
 interface CliOptions extends BaseCliOptions {
@@ -18,8 +17,8 @@ export default {
       demandOption: true
     }),
 
-  handler: async (args) => {
-    await defaultMigrator.generate(args.name);
+  handler: baseHandler(async (args, migrator) => {
+    await migrator.generate(args.name);
 
     logger.log(
       'New migration was created at',
@@ -28,5 +27,5 @@ export default {
     );
 
     process.exit(0);
-  }
+  })
 } as CommandModule<CliOptions, CliOptions>;

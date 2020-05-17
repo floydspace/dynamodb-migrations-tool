@@ -1,7 +1,7 @@
 import { CommandModule } from 'yargs';
 
-import { defaultMigrator } from '../core/migrator';
-import { BaseCliOptions, baseOptions } from '../core/yargs';
+import { Migrator } from '../core/migrator';
+import { BaseCliOptions, baseHandler, baseOptions } from '../core/yargs';
 import logger from '../helpers/logger';
 
 interface CliOptions extends BaseCliOptions {
@@ -20,26 +20,26 @@ export default {
       type: 'string'
     }),
 
-  handler: async function (args) {
+  handler: baseHandler(async (args, migrator) => {
     const command = args._[0];
 
     switch (command) {
       case 'migrate':
-        await migrate(args);
+        await migrate(args, migrator);
         break;
       case 'migrate:status':
-        await migrationStatus();
+        await migrationStatus(migrator);
         break;
     }
 
     process.exit(0);
-  }
+  })
 } as CommandModule<CliOptions, CliOptions>;
 
-async function migrate(args: CliOptions) {
+async function migrate(args: CliOptions, migrator: Migrator) {
   try {
-    const migrations = await defaultMigrator.pending();
-    const options: Partial<CliOptions> = {};
+    const migrations = await migrator.pending();
+    const options = {} as CliOptions;
 
     if (migrations.length === 0) {
       logger.log('No migrations were executed, database schema was already up to date.');
@@ -60,21 +60,21 @@ async function migrate(args: CliOptions) {
       options.from = args.from;
     }
 
-    await defaultMigrator.up(options);
+    await migrator.up(options);
   } catch (e) {
     logger.error(e);
   }
 }
 
-async function migrationStatus() {
+async function migrationStatus(migrator: Migrator) {
   try {
-    const executedMigrations = await defaultMigrator.executed();
+    const executedMigrations = await migrator.executed();
 
     executedMigrations.forEach(migration => {
       logger.log('up', migration.file);
     });
 
-    const pendingMigrations = await defaultMigrator.pending();
+    const pendingMigrations = await migrator.pending();
 
     pendingMigrations.forEach(migration => {
       logger.log('down', migration.file);
