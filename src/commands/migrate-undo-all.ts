@@ -4,7 +4,7 @@ import { BaseCliOptions, baseHandler, baseOptions } from '../core/yargs';
 import logger from '../helpers/logger';
 
 interface CliOptions extends BaseCliOptions {
-  to?: string | number;
+  to: string | 0;
 }
 
 export default {

@@ -1,5 +1,5 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
-import nodePlop from 'node-plop/lib/node-plop';
+import nodePlop from 'node-plop';
 import path from 'path';
 import { pick } from 'ramda';
 import Umzug from 'umzug';
@@ -19,8 +19,11 @@ export interface MigratorOptions {
   attributeName?: string;
 }
 
-export class Migrator {
-  private umzug: Umzug.Umzug;
+interface Generator {
+  generate(migrationName: string): Promise<void>;
+}
+
+export class Migrator extends Umzug implements Generator {
   private generator;
 
   /**
@@ -38,7 +41,7 @@ export class Migrator {
     tableName = tableName || 'migrations';
     attributeName = attributeName || 'name';
 
-    this.umzug = new Umzug({
+    super({
       storage: new DynamoDBStorage({ dynamodb, tableName, attributeName }),
       migrations: {
         params: [dynamodb],
@@ -52,26 +55,6 @@ export class Migrator {
 
   async generate(migrationName: string) {
     await this.generator.runActions({timestamp: getCurrentYYYYMMDDHHmms(), name: migrationName});
-  }
-
-  execute(options?: Umzug.ExecuteOptions) {
-    return this.umzug.execute(options);
-  }
-
-  pending() {
-    return this.umzug.pending();
-  }
-
-  executed() {
-    return this.umzug.executed();
-  }
-
-  up(options?) {
-    return this.umzug.up(options);
-  }
-
-  down(options?) {
-    return this.umzug.down(options);
   }
 }
 
