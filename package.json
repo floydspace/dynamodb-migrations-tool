@@ -67,6 +67,7 @@
   "dependencies": {
     "aws-sdk": "^2.673.0",
     "cli-color": "^2.0.0",
+    "cosmiconfig": "^6.0.0",
     "node-plop": "^0.25.0",
     "ramda": "^0.27.0",
     "umzug": "^2.3.0",

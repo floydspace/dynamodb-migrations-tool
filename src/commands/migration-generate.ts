@@ -22,7 +22,7 @@ export default {
 
     logger.log(
       'New migration was created at',
-      clc.blueBright(path.resolve(process.cwd(), 'migrations', args.name)),
+      clc.blueBright(path.resolve(process.cwd(), args.migrationsPath, args.name)),
       '.'
     );
 

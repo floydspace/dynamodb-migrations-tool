@@ -16,10 +16,6 @@ export interface BaseCliOptions {
 
 export function baseOptions(yargs: Argv<BaseCliOptions>) {
   return yargs
-    .option('options-path', {
-      describe: 'The path to a JSON file with additional options',
-      type: 'string'
-    })
     .option('migrations-path', {
       describe: 'The path to the migrations folder',
       default: 'migrations',
@@ -59,6 +55,7 @@ export function baseHandler<T extends BaseCliOptions>(callback: (args: Arguments
       ...pick(['region', 'accessKeyId', 'secretAccessKey'], args),
       tableName: args.tableName,
       attributeName: args.attributeName,
+      migrationsPath: args.migrationsPath,
     });
 
     callback(args, migrator);

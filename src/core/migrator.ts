@@ -17,6 +17,7 @@ export interface MigratorOptions {
   dynamodb?: DocumentClient;
   tableName?: string;
   attributeName?: string;
+  migrationsPath?: string;
 }
 
 interface Generator {
@@ -25,6 +26,7 @@ interface Generator {
 
 export class Migrator extends Umzug implements Generator {
   private generator;
+  private migrationsPath: string;
 
   /**
    * Migrator factory function, creates an umzug instance with dynamodb storage.
@@ -51,10 +53,15 @@ export class Migrator extends Umzug implements Generator {
 
     const plop = nodePlop(path.join(__dirname, '../../.plop/plopfile.js'));
     this.generator = plop.getGenerator('migration');
+    this.migrationsPath = options.migrationsPath || 'migrations';
   }
 
   async generate(migrationName: string) {
-    await this.generator.runActions({timestamp: getCurrentYYYYMMDDHHmms(), name: migrationName});
+    await this.generator.runActions({
+      migrationsPath: this.migrationsPath,
+      timestamp: getCurrentYYYYMMDDHHmms(),
+      name: migrationName
+    });
   }
 }
 
