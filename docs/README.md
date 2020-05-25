@@ -3,9 +3,8 @@
 The manuals will show all the flags and options which are available for the respective tasks.
 If you find yourself in a situation where you always define certain flags in order to
 make the CLI compliant to your project, you can move those definitions also into a file called
-`.dynamitrc`. The file will get `require`d if available and can therefore be either a JSON file
-or a Node.JS script that exports a hash. You can also use the `--options-path` option to declare a
-path to another configuration file.  
+`.dynamitrc`. The file will get `require`d if available and can therefore be either a JSON file, YAML
+or a Node.JS script that exports a hash.
 
 ### Example for a Node.JS script
 
@@ -13,7 +12,7 @@ path to another configuration file.
 var path = require('path')
 
 module.exports = {
-  'migrations-path': path.resolve('db', 'migrate')
+  migrationsPath: 'db/migrate'
 }
 ```
 
