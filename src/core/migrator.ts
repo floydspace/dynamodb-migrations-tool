@@ -37,23 +37,25 @@ export class Migrator extends Umzug implements Generator {
    * @param options.attributeName - name of the table primaryKey attribute in DynamoDB
    */
   constructor(options: MigratorOptions = {}) {
-    let { dynamodb, tableName, attributeName } = options;
+    let { dynamodb, tableName, attributeName, migrationsPath } = options;
 
     dynamodb = dynamodb || new DocumentClient(pick(['region', 'accessKeyId', 'secretAccessKey'], options));
     tableName = tableName || 'migrations';
     attributeName = attributeName || 'name';
+    migrationsPath = migrationsPath || 'migrations';
 
     super({
       storage: new DynamoDBStorage({ dynamodb, tableName, attributeName }),
       migrations: {
         params: [dynamodb],
+        path: migrationsPath,
       },
       logging: logger.log
     });
 
     const plop = nodePlop(path.join(__dirname, '../../.plop/plopfile.js'));
     this.generator = plop.getGenerator('migration');
-    this.migrationsPath = options.migrationsPath || 'migrations';
+    this.migrationsPath = migrationsPath;
   }
 
   async generate(migrationName: string) {
