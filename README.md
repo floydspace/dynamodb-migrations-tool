@@ -35,8 +35,9 @@ Commands:
   dynamit migration:generate             Generates a new migration file       [aliases: migration:create]
 
 Options:
-  --version  Show version number                                         [boolean]
-  --help     Show help                                                   [boolean]
+  --version                              Show version number                                         [boolean]
+  --help                                 Show help                                                   [boolean]
+  --migrations-path                      Specify folder with migrations, default 'migrations'        [string]
 ```
 
 ## Documentation

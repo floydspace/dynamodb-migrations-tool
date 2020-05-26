@@ -30,7 +30,7 @@ describe('Migrator tests', () => {
     expect(getGenerator).toBeCalled();
     expect(getGenerator).toBeCalledWith('migration');
     expect(runActions).toBeCalledTimes(1);
-    expect(runActions).toBeCalledWith({timestamp: '20200511000000', name: 'test'});
+    expect(runActions).toBeCalledWith({timestamp: '20200511000000', name: 'test', migrationsPath: 'migrations'});
   });
 
   afterAll((done) => {

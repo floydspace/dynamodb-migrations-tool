@@ -59,6 +59,7 @@ export function baseHandler<T extends BaseCliOptions>(callback: (args: Arguments
       ...pick(['region', 'accessKeyId', 'secretAccessKey'], args),
       tableName: args.tableName,
       attributeName: args.attributeName,
+      migrationsPath: args.migrationsPath,
     });
 
     callback(args, migrator);
