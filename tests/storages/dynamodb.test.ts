@@ -43,8 +43,8 @@ describe('DynamoDBStorage tests', () => {
 
     expect(spy).toHaveBeenCalledTimes(2);
     expect(migrations).toHaveLength(2);
-    expect(migrations[0]).toEqual('foo');
-    expect(migrations[1]).toEqual('bar');
+    expect(migrations[0]).toEqual('bar');
+    expect(migrations[1]).toEqual('foo');
 
     AWSMock.restore('DynamoDB.DocumentClient');
   });
