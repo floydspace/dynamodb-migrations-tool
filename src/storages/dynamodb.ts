@@ -1,4 +1,5 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
+import { sort } from 'ramda';
 import { Storage } from 'umzug';
 
 interface DynamoDBStorageOptions {
@@ -82,6 +83,6 @@ export default class DynamoDBStorage implements Storage {
       startKey = LastEvaluatedKey;
     } while (startKey);
 
-    return executedItems;
+    return sort((a, b) => a.localeCompare(b), executedItems);
   }
 }

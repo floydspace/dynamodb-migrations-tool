@@ -50,7 +50,7 @@
     "@types/cli-color": "^2.0.0",
     "@types/jest": "^25.1.4",
     "@types/node": "^13.9.2",
-    "@types/ramda": "^0.27.5",
+    "@types/ramda": "^0.27.19",
     "@types/umzug": "^2.2.3",
     "@typescript-eslint/eslint-plugin": "^2.24.0",
     "@typescript-eslint/parser": "^2.24.0",
@@ -69,7 +69,7 @@
     "cli-color": "^2.0.0",
     "cosmiconfig": "^6.0.0",
     "node-plop": "^0.25.0",
-    "ramda": "^0.27.0",
+    "ramda": "^0.27.1",
     "umzug": "^2.3.0",
     "yargs": "^15.3.1"
   }
