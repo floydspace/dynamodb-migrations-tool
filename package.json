@@ -19,9 +19,8 @@
     "lint": "eslint . --ext .ts --ignore-path .gitignore",
     "pretest": "npm run lint",
     "test": "jest",
-    "coverage": "jest --coverage && cat ./coverage/lcov.info | coveralls",
-    "prepublishOnly": "npm run build",
-    "semantic-release": "semantic-release"
+    "coverage": "npm run test -- --coverage",
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -43,7 +42,7 @@
   "bugs": {
     "url": "https://github.com/floydspace/dynamodb-migrations-tool/issues"
   },
-  "homepage": "https://floydspace.github.io",
+  "homepage": "https://floydspace.github.io/dynamodb-migrations-tool",
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^8.3.4",
