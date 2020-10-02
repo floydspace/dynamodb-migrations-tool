@@ -44,8 +44,8 @@
   },
   "homepage": "https://floydspace.github.io/dynamodb-migrations-tool",
   "devDependencies": {
-    "@commitlint/cli": "^8.3.5",
-    "@commitlint/config-conventional": "^8.3.4",
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
     "@types/cli-color": "^2.0.0",
     "@types/jest": "^25.1.4",
     "@types/node": "^13.9.2",
@@ -59,7 +59,7 @@
     "husky": "^4.2.5",
     "jest": "^25.1.0",
     "mockdate": "^2.0.5",
-    "semantic-release": "^17.0.7",
+    "semantic-release": "^17.1.2",
     "ts-jest": "^25.5.0",
     "typescript": "^3.8.3"
   },
