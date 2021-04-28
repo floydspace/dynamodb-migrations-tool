@@ -1,4 +1,4 @@
-import DynamoDB, { DocumentClient } from 'aws-sdk/clients/dynamodb';
+import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import nodePlop from 'node-plop';
 import path from 'path';
 import { pick } from 'ramda';
@@ -14,9 +14,8 @@ export interface MigratorOptions {
   region?: string;
   accessKeyId?: string;
   secretAccessKey?: string;
-  endpoint?: string;
-  dynamodb?: DynamoDB;
-  docclient?: DocumentClient;
+  endpointUrl?: string;
+  dynamodb?: DocumentClient;
   tableName?: string;
   attributeName?: string;
   migrationsPath?: string;
@@ -34,25 +33,23 @@ export class Migrator extends Umzug implements Generator {
    * Migrator factory function, creates an umzug instance with dynamodb storage.
    * @param options
    * @param options.region - an AWS Region
-   * @param options.dynamodb - a DynamoDB client instance
-   * @param options.docclient - a DynamoDB document client instance
-   * @param options.endpoint - an optional endpoint URL for local DynamoDB instances
+   * @param options.dynamodb - a DynamoDB document client instance
+   * @param options.endpointUrl - an optional endpoint URL for local DynamoDB instances
    * @param options.tableName - a name of migration table in DynamoDB
    * @param options.attributeName - name of the table primaryKey attribute in DynamoDB
    */
   constructor(options: MigratorOptions = {}) {
-    let { dynamodb, docclient, tableName, attributeName, migrationsPath } = options;
+    let { dynamodb, tableName, attributeName, migrationsPath } = options;
 
-    docclient = docclient || new DocumentClient(pick(['region', 'accessKeyId', 'secretAccessKey', 'endpoint'], options));
-    dynamodb = dynamodb || new DynamoDB(pick(['region', 'accessKeyId', 'secretAccessKey', 'endpoint'], options));
+    dynamodb = dynamodb || new DocumentClient(pick(['region', 'accessKeyId', 'secretAccessKey', 'endpointUrl'], options));
     tableName = tableName || 'migrations';
     attributeName = attributeName || 'name';
     migrationsPath = migrationsPath || 'migrations';
 
     super({
-      storage: new DynamoDBStorage({ dynamodb: docclient, tableName, attributeName }),
+      storage: new DynamoDBStorage({ dynamodb, tableName, attributeName }),
       migrations: {
-        params: [docclient, dynamodb],
+        params: [dynamodb, options],
         path: migrationsPath,
       },
       logging: logger.log

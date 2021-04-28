@@ -9,7 +9,7 @@ export interface BaseCliOptions {
   accessKeyId: string;
   secretAccessKey: string;
   region: string;
-  endpoint: string;
+  endpointUrl: string;
   tableName: string;
   attributeName: string;
 }
@@ -33,7 +33,7 @@ export function baseOptions(yargs: Argv<BaseCliOptions>) {
       describe: 'AWS service region',
       type: 'string'
     })
-    .option('endpoint', {
+    .option('endpoint-url', {
       describe: 'The DynamoDB endpoint url to use. The DynamoDB local instance url could be specified here.',
       type: 'string'
     })
@@ -52,7 +52,7 @@ export function baseOptions(yargs: Argv<BaseCliOptions>) {
 export function baseHandler<T extends BaseCliOptions>(callback: (args: Arguments<T>, migrator: Migrator) => void) {
   return (args: Arguments<T>): void => {
     const migrator = new Migrator({
-      ...pick(['region', 'accessKeyId', 'secretAccessKey', 'endpoint'], args),
+      ...pick(['region', 'accessKeyId', 'secretAccessKey', 'endpointUrl'], args),
       tableName: args.tableName,
       attributeName: args.attributeName,
       migrationsPath: args.migrationsPath,
