@@ -10,9 +10,14 @@ describe('DynamoDBStorage tests', () => {
     done();
   });
 
+  it('Should documentClient option throw', async () => {
+    const constructor = () => new DynamoDBStorage({ dynamodb: new DocumentClient() as never, documentClient: new DocumentClient() });
+    expect(constructor).toThrowError(/^"dynamodb" must be a AWS.DynamoDB instance$/);
+  });
+
   it('Should dynamodb option throw', async () => {
-    const constructor = () => new DynamoDBStorage({ dynamodb: new AWS.DynamoDB() as never });
-    expect(constructor).toThrowError(/^"dynamodb" must be a DocumentClient instance$/);
+    const constructor = () => new DynamoDBStorage({ dynamodb: new AWS.DynamoDB(), documentClient: new AWS.DynamoDB() as never });
+    expect(constructor).toThrowError(/^"documentClient" must be a DocumentClient instance$/);
   });
 
   it('Should get migrations', async () => {
